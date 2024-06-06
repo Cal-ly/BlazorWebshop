@@ -1,9 +1,12 @@
-using BlazorWebshop.Components;
-using BlazorWebshop.Components.Account;
-using BlazorWebshop.Data;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+global using BlazorWebshop.Models;
+global using BlazorWebshop.Components;
+global using BlazorWebshop.Components.Account;
+global using BlazorWebshop.Data;
+global using BlazorWebshop.Utilities;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Components.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,10 +56,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+app.MapControllers();
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 app.Run();
